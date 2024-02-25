@@ -1,3 +1,5 @@
+// 자식요소(children)을 감싸 화면 최대 너비를 초과하지 않도록 제한
+
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
@@ -13,3 +15,4 @@ export default function MaxWidthWrapper({ className, children }: MaxWidthWrapper
         </div>
     )
 }
+
