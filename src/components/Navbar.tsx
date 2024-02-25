@@ -71,7 +71,7 @@ export default function Navbar() {
                                             aria-hidden="true"
                                         />
                                     ) : null}
-                                    {/* 로그인 전/후 */}
+                                    {/* 카트 - 로그인 전/후 */}
                                     <div className="ml-4 flex-root lg:ml-6">
                                         <Cart />
                                     </div>
