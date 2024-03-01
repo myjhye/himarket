@@ -1,22 +1,30 @@
-// Express, Next.js, Payload CMS를 통합한 서버 설계
+// 서버 설정 및 API 라우팅 & Express, Next.js, Payload CMS의 통합 포인트 역할
 /*
-    Next.js: 관리자 페이지의 프론트. Payload CMS의 API 사용해 화면 렌더링
-    Express: 백엔드 로직 처리. HTTP 요청 관리, 라우팅, 미들웨어 처리
+    Next.js: 관리자 페이지의 프론트 - Payload CMS의 API 사용해 화면 렌더링
+    Express: 백엔드 로직 처리 - HTTP 요청 관리, 라우팅, 미들웨어 처리
     Payload CMS: Headless CMS로서 API 제공
 
     - Next.js 프론트에서 Payload CMS API로 데이터 가져와 화면 렌더링 & Express는 백엔드로서 Next.js와 Payload 사이의 통신 관리
 */
 
-
-import express from "express";
+import express from 'express';
 import { getPayloadClient } from "./get-payload";
 import { nextApp, nextHandler } from "./next-utils";
+import * as trpcExpress from '@trpc/server/adapters/express';
+import { appRouter } from './trpc';
 
 const app = express()
 // 환경 변수에서 포트 번호를 가져오거나 기본 값으로 3000을 설정
 const PORT = Number(process.env.PORT) || 3000
 
+const createContext = ({req, res}: trpcExpress.CreateExpressContextOptions) => ({
+    req,
+    res,
+})
+
 const start = async () => {
+
+
     const payload = await getPayloadClient({
         // Payload CMS를 Express와 통합
         initOptions: {
@@ -29,8 +37,16 @@ const start = async () => {
         },
     })
 
+    // tRPC 미들웨어를 사용해 Express에 API 라우팅을 설정
+    app.use('/api/trpc', trpcExpress.createExpressMiddleware({
+        router: appRouter,
+        createContext,
+    }));
+
+
     // Express가 받는 HTTP 요청을 Next.js에 위임해 대신 처리하게 한다 - Next.js의 서버사이드렌더링을 위해서 (서버에서 데이터 처리를 한 후 프론트에 전달)
     app.use((req, res) => nextHandler(req, res))
+
 
     // Next.js 어플리케이션 준비. 준비 완료되면 서버 시작.
     nextApp.prepare().then(() => {
