@@ -1,18 +1,24 @@
-// Payload CMS 기반 프로젝트 구성 - 관리자 페이지를 맞춤 설정
+// Payload CMS 세팅 - 서버 url, 데이터베이스 연결, 컬렉션 정의, 사용자 인증 설정
 
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import path from "path";
 import { buildConfig } from "payload/config";
+import { Users } from "./collections/Users";
+import dotenv from 'dotenv';
+
+dotenv.config({
+    path: path.resolve(__dirname, "../.env"),
+})
 
 export default buildConfig({
 
     // 서버 url - localhost:3000
     serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
     
-    // CMS 컨텐츠 구조 - 컨텐츠 없음
-    collections: [],
+    // CMS 컨텐츠 구조
+    collections: [Users],
 
     // 관리자 페이지를 /sell 경로로 접근
     routes: {
@@ -21,6 +27,7 @@ export default buildConfig({
 
     // 관리자 페이지 구성 설정
     admin: {
+        user: "users",
         bundler: webpackBundler(),
         meta: {
             titleSuffix: "- HiMarket",

@@ -1,8 +1,8 @@
-// Payload CMS API를 사용하기 위한 초기화
+// Payload CMS 생성
 
 import dotenv from "dotenv";
 import path from "path";
-import payload from "payload";
+import payload, { Payload } from "payload";
 import { InitOptions } from "payload/config";
 
 // .env 파일에서 환경 변수 로드. 파일은 상위 디렉토리에 위치.
@@ -27,7 +27,7 @@ interface Args {
     initOptions?: Partial<InitOptions>
 }
 
-export const getPayloadClient = async ({ initOptions }: Args = {}) => {
+export const getPayloadClient = async ({ initOptions }: Args = {}): Promise<Payload> => {
 
     // PAYLOAD_SECRET 환경 변수가 없으면 에러 발생 시키기
     if (!process.env.PAYLOAD_SECRET) {
@@ -39,7 +39,7 @@ export const getPayloadClient = async ({ initOptions }: Args = {}) => {
         return cached.client
     }
 
-    // 클라이언트 초기화 프로미스가 없으면 새로 생성
+    // 클라이언트 초기화된 게 없으면 새로 생성
     if (!cached.promise) {
         cached.promise = payload.init({
             // payload와 통신하는 비밀 키
@@ -51,7 +51,7 @@ export const getPayloadClient = async ({ initOptions }: Args = {}) => {
         })
     }
     
-    // Payload 클라이언트의 초기화 시도
+    // Payload 클라이언트 초기화
     try {
         cached.client = await cached.promise
     } catch (e: unknown) {
