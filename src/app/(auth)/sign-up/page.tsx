@@ -14,6 +14,15 @@ import { trpc } from "@/trpc/client";
 
 export default function SignUp(){
 
+    /*
+        useForm
+        1. register: 입력 폼 데이터 받기
+        2. handleSubmit: 입력 받은 폼 데이터 처리
+        3. formState: 입력 폼 에러 상태
+
+        4. TAuthCredentialsValidator: 입력 폼 유효성 기준
+        5. AuthCredentialsValidator: 입력 폼 유효성 기준을 기반으로 유효성 검사
+    */
     const {
         register,
         handleSubmit,
@@ -22,18 +31,22 @@ export default function SignUp(){
         resolver: zodResolver(AuthCredentialsValidator),
       })
 
+    /*
+      1. createPayloadUser: 새로운 사용자 데이터를 서버에 전달하고 데이터베이스에 저장
+      2. mutate: createPayloadUser을 실행
+    */
     const { 
         mutate, 
-        isLoading 
+        isLoading, 
     } = trpc.auth.createPayloadUser.useMutation({})
 
+    // 사용자가 입력한 email, password를 받아 mutate에 전달 - createPayloadUser 뮤테이션 실행 - TAuthCredentialsValidator로 입력 데이터의 타입 지정
     const onSubmit = ({
         email,
         password,
-      }: TAuthCredentialsValidator) => {
-        console.log("Sign up button clicked");
+    }: TAuthCredentialsValidator) => {
         mutate({ email, password })
-      }
+    }
 
     return (
         <>
