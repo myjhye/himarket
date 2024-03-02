@@ -6,6 +6,11 @@ import { getPayloadClient } from '../get-payload'
 import { TRPCError } from '@trpc/server'
 
 export const authRouter = router({
+  /*
+    1. createPayloadUser: 회원가입 처리
+    2. publicProcedure: 권한 없는 사용자(미로그인)도 요청 가능
+    - 미로그인 사용자 회원가입 가능
+  */
   createPayloadUser: publicProcedure
     // 사용자 입력 값 유효성 검사
     .input(AuthCredentialsValidator)
