@@ -1,3 +1,5 @@
+// 회원가입 페이지
+
 "use client";
 
 import { Icons } from "@/components/Icons";
@@ -11,8 +13,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-credentials-validator";
 import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
+import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
 
 export default function SignUp(){
+
+    const router = useRouter();
 
     /*
         useForm
@@ -31,15 +38,43 @@ export default function SignUp(){
         resolver: zodResolver(AuthCredentialsValidator),
       })
 
+
     /*
       1. createPayloadUser: 새로운 사용자 데이터를 서버에 전달하고 데이터베이스에 저장
       2. mutate: createPayloadUser을 실행
     */
+
+    //-- 회원가입 실행 --//
     const { 
         mutate, 
         isLoading, 
-    } = trpc.auth.createPayloadUser.useMutation({})
+    } = trpc.auth.createPayloadUser.useMutation({
+        
+        // 에러
+        onError: (err) => {
+            // 이메일 중복
+            if (err.data?.code === "CONFLICT") {
+                toast.error("This email is already in use. Sign in instead?");
+                return
+            }
+            // 기타 에러
+            if (err instanceof ZodError) {
+                toast.error(err.issues[0].message);
+                return
+            }
+            toast.error('Something went wrong. Plase try again.')
+        },
 
+        // 성공
+        onSuccess: ({sentToEmail}) => {
+            // 전송됨 팝업
+            toast.success(`Verification email sent to ${sentToEmail}.`);
+            // 인증 요청 화면 이동
+            router.push('/verify-email?to=' + sentToEmail);
+        }
+    })
+
+    //-- 회원가입 실행 --//
     // 사용자가 입력한 email, password를 받아 mutate에 전달 - createPayloadUser 뮤테이션 실행 - TAuthCredentialsValidator로 입력 데이터의 타입 지정
     const onSubmit = ({
         email,
@@ -95,6 +130,10 @@ export default function SignUp(){
                                         })}
                                         type='password'
                                     />
+                                    {/* 에러 - 8자 입력 미만 */}
+                                    {errors?.password && (
+                                        <p className="text-sm text-red-500">{errors.password.message}</p>
+                                    )}
                                 </div>
                                 <Button type="submit">
                                     Sign up
