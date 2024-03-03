@@ -12,6 +12,7 @@ import { getPayloadClient } from "./get-payload";
 import { nextApp, nextHandler } from "./next-utils";
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter } from './trpc';
+import { inferAsyncReturnType } from '@trpc/server';
 
 const app = express()
 // 환경 변수에서 포트 번호를 가져오거나 기본 값으로 3000을 설정
@@ -22,9 +23,10 @@ const createContext = ({req, res}: trpcExpress.CreateExpressContextOptions) => (
     res,
 })
 
+// createContext의 반환(req, res) 타입 정의 - 전역 사용
+export type ExpressContext = inferAsyncReturnType<typeof createContext>
+
 const start = async () => {
-
-
     const payload = await getPayloadClient({
         // Payload CMS를 Express와 통합
         initOptions: {
@@ -37,7 +39,7 @@ const start = async () => {
         },
     })
 
-    // tRPC 미들웨어를 사용해 Express에 API 라우팅을 설정
+    // Express에 API 라우팅 설정 - tRPC 미들웨어 사용
     app.use('/api/trpc', trpcExpress.createExpressMiddleware({
         router: appRouter,
         createContext,

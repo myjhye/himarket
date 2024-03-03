@@ -1,4 +1,4 @@
-// 회원가입 백엔드 - 회원가입 처리, 이메일 인증
+// 회원가입 백엔드 - 회원가입, 이메일 인증, 로그인
 
 import { AuthCredentialsValidator } from '../lib/validators/account-credentials-validator'
 import { publicProcedure, router } from './trpc'
@@ -12,14 +12,18 @@ export const authRouter = router({
     publicProcedure: 권한 없는 사용자(미로그인)도 요청 가능
     - 미로그인 사용자 회원가입 가능
   */
-  //-- 1. 회원가입 처리 --//
+  //-- 1. 회원가입 --//
   createPayloadUser: publicProcedure
-    // 사용자 입력 값 유효성 검사
+    
+    // .input: 입력 값 유효성 검사
     .input(AuthCredentialsValidator)
+    
     // 사용자 입력 값 기반으로 새 사용자 생성(회원가입)
     .mutation(async ({ input }) => {
+      
       // 회원가입 입력 값
       const { email, password } = input
+      
       // payload 인스턴스
       const payload = await getPayloadClient()
 
@@ -54,6 +58,8 @@ export const authRouter = router({
       }
     }),
 
+    
+    
     //-- 2. 이메일 인증 --//
     verifyEmail: publicProcedure
       
@@ -88,4 +94,35 @@ export const authRouter = router({
         // 인증 성공 시 isVerified를 true로
         return { success: true }
     }),
+
+
+    
+    //-- 3. 로그인 --//
+    signIn: publicProcedure
+      .input(AuthCredentialsValidator)
+      .mutation(async ({ input, ctx }) => {
+        
+        const { email, password } = input
+        const payload  = await getPayloadClient();
+        const { res } = ctx
+
+        //** 로그인
+        try {
+          await payload.login({
+            collection: "users",
+            data: {
+              email,
+              password,
+            },
+            // 응답을 login 메소드에 전달 - 로그인 상태 유지
+            res,
+          })
+          return { success: true }
+
+        } 
+        // 로그인 실패
+        catch (error) {
+          throw new TRPCError({ code: 'UNAUTHORIZED' })
+        }
+      })
 })
