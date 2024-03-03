@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
 import { PropsWithChildren } from "react";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
             </div>
           </Providers>
         </main>
+
+        {/* 팝업 메세지 위치 */}
+        <Toaster 
+          position="top-center"
+          richColors 
+        />
       </body>
     </html>
   );
