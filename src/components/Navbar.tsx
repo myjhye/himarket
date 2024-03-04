@@ -4,10 +4,14 @@ import { Icons } from "./Icons";
 import NavItems from "./NavItems";
 import { buttonVariants } from "./ui/button";
 import Cart from "./Cart";
+import { getServerSideUser } from "@/lib/payload-utils";
+import { cookies } from "next/headers";
+import UserAccountNav from "./UserAccountNav";
 
-export default function Navbar() {
+export default async function Navbar() {
     
-    const user = 0;
+    const nextCookies = cookies();
+    const { user } = await getServerSideUser(nextCookies);
     
     return (
         <div className="bg-white sticky z-59 top-0 inset-x-0 h-16">
@@ -28,7 +32,7 @@ export default function Navbar() {
                             </div>
                             <div className="ml-auto flex items-center">
                                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                                    {/* 회원가입 - 로그인 전 */}
+                                    {/*  로그인 전 - 로그인 버튼 */}
                                     {user ? null : (
                                         <Link 
                                             href='/sign-in'
@@ -37,16 +41,17 @@ export default function Navbar() {
                                             Sign in
                                         </Link>
                                     )}
-                                    {/* 회색 선 - 로그인 전 */}
+                                    {/* 로그인 전 - 회색 선 */}
                                     {user ? null : (
                                         <span 
                                             className="h-6 w-px bg-gray-200" 
                                             aria-hidden="true"
                                         />
                                     )}
-                                    {/* 계정 생성 - 로그인 전 */}
+                                    
+                                    {/* 로그인 전 - 회원가입 버튼 / 로그인 후 - 계정 정보 */}
                                     {user ? (
-                                        <p></p>
+                                        <UserAccountNav user={user} />
                                     ) : (
                                         <Link 
                                             href='/sign-up'
@@ -55,7 +60,7 @@ export default function Navbar() {
                                             Create Account
                                         </Link>
                                     )}
-                                    {/* 회색 선 - 로그인 전 */}
+                                    {/* 로그인 전 - 회색 선 */}
                                     {user ? null : (
                                         <div className="flex lg:ml-6">
                                             <span 
@@ -64,14 +69,14 @@ export default function Navbar() {
                                             />
                                         </div>
                                     )}
-                                    {/* 회색 선 - 로그인 후 */}
+                                    {/* 로그인 후 - 회색 선 */}
                                     {user ? (
                                         <span 
                                             className="h-6 w-px bg-gray-200" 
                                             aria-hidden="true"
                                         />
                                     ) : null}
-                                    {/* 카트 - 로그인 전/후 */}
+                                    {/* 로그인 전/후 - 카트 */}
                                     <div className="ml-4 flex-root lg:ml-6">
                                         <Cart />
                                     </div>
