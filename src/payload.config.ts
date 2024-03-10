@@ -7,9 +7,13 @@ import path from "path";
 import { buildConfig } from "payload/config";
 import { Users } from "./collections/Users";
 import dotenv from 'dotenv';
+import { Products } from "./collections/Products/Products";
+import { Media } from "./collections/Media";
+import { ProductFile } from "./collections/ProductFile";
+import { Orders } from "./collections/Orders";
 
 dotenv.config({
-    path: path.resolve(__dirname, "../.env"),
+    path: path.resolve(__dirname, '../.env'),
 })
 
 export default buildConfig({
@@ -17,8 +21,14 @@ export default buildConfig({
     // 서버 url - localhost:3000
     serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
     
-    // CMS 컨텐츠 구조
-    collections: [Users],
+    // CMS 컨텐츠
+    collections: [
+        Users, 
+        Products,
+        Media,
+        ProductFile,
+        Orders,
+    ],
 
     // 관리자 페이지를 /sell 경로로 접근
     routes: {
