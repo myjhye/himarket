@@ -2341,6 +2341,13 @@
   dependencies:
     undici-types "~5.26.4"
 
+"@types/node@>=8.1.0":
+  version "20.11.28"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.28.tgz#4fd5b2daff2e580c12316e457473d68f15ee6f66"
+  integrity sha512-M/GPWVS2wLkSkNHVeLkrF2fD5Lx5UC4PxA0uZcKc6QqbIQUJyW1jVjueJYi1z8n0I5PxYrtpnPnWglE+y9A0KA==
+  dependencies:
+    undici-types "~5.26.4"
+
 "@types/nodemailer@^6.4.14":
   version "6.4.14"
   resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.14.tgz#5c81a5e856db7f8ede80013e6dbad7c5fb2283e2"
@@ -7643,6 +7650,13 @@ qs@6.11.2, qs@^6.9.1:
   dependencies:
     side-channel "^1.0.4"
 
+qs@^6.11.0:
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.12.0.tgz#edd40c3b823995946a8a0b1f208669c7a200db77"
+  integrity sha512-trVZiI6RMOkO476zLGaBIzszOdFPnCCXHPG9kn0yuS1uz6xdVxPfZdB3vUig9pxPFDM9BRAgz/YUIVQ1/vuiUg==
+  dependencies:
+    side-channel "^1.0.6"
+
 qs@~6.4.0:
   version "6.4.1"
   resolved "https://registry.npmjs.org/qs/-/qs-6.4.1.tgz"
@@ -8303,6 +8317,16 @@ side-channel@^1.0.4:
     get-intrinsic "^1.2.4"
     object-inspect "^1.13.1"
 
+side-channel@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/side-channel/-/side-channel-1.0.6.tgz#abd25fb7cd24baf45466406b1096b7831c9215f2"
+  integrity sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==
+  dependencies:
+    call-bind "^1.0.7"
+    es-errors "^1.3.0"
+    get-intrinsic "^1.2.4"
+    object-inspect "^1.13.1"
+
 sift@16.0.1:
   version "16.0.1"
   resolved "https://registry.npmjs.org/sift/-/sift-16.0.1.tgz"
@@ -8608,6 +8632,14 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
   integrity sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==
+
+stripe@^14.21.0:
+  version "14.21.0"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-14.21.0.tgz#6b984b06c16765ca08fb86b9185fe4ea0a8409fd"
+  integrity sha512-PFmpl35Myn6UDdVLTHcuppdbkPVvlQfkMHOmgGZh5QOdSUxVmvz090Z4obLg8ta1MNs1PNpzr9i7E39iAIv07A==
+  dependencies:
+    "@types/node" ">=8.1.0"
+    qs "^6.11.0"
 
 strnum@^1.0.5:
   version "1.0.5"
