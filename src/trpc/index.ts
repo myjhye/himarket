@@ -1,19 +1,21 @@
-// trpc 기반으로 데이터베이스에서 데이터 조회하는 쿼리
-// trpc: 화면과 서버간에 데이터 타입이 서로 일치하는지 확인, 아니면 오류 발생
+// trpc 기반으로 데이터베이스에서 데이터 조회
+// trpc - 화면과 서버간에 데이터 타입이 서로 일치하는지 확인, 아니면 오류 발생
 
 import { z } from 'zod'
 import { authRouter } from './auth-router'
 import { publicProcedure, router } from './trpc'
 import { QueryValidator } from '../lib/validators/query-validator'
 import { getPayloadClient } from '../get-payload'
+import { paymentRouter } from './payment-router'
 
 export const appRouter = router({
+  
   auth: authRouter,
+  payment: paymentRouter,
 
   getInfiniteProducts: publicProcedure
     // 클라이언트에서 받은 입력의 스키마 정의
-    .input(
-      z.object({
+    .input(z.object({
         limit: z.number().min(1).max(100),
         cursor: z.number().nullish(),
         query: QueryValidator,
